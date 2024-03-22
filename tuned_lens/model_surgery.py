@@ -2,7 +2,7 @@
 
 from contextlib import contextmanager
 from typing import Any, Generator, TypeVar, Union
-
+import transformers
 try:
     import transformer_lens as tl
 
@@ -113,6 +113,8 @@ def get_final_norm(model: Model) -> Norm:
     ):
         final_layer_norm = base_model.ln_f
     elif isinstance(base_model, models.llama.modeling_llama.LlamaModel):
+        final_layer_norm = base_model.norm
+    elif isinstance(base_model, models.mistral.modeling_mistral.MistralModel):
         final_layer_norm = base_model.norm
     else:
         raise NotImplementedError(f"Unknown model type {type(base_model)}")
